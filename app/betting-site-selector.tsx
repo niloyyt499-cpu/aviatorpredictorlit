@@ -3,22 +3,24 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }: { primarySrc: string, fallbackSrc: string, alt: string }) => {
-  const [imgSrc, setImgSrc] = useState(primarySrc);
+const ImageWithFallback = ({ localSrc, externalSrc, alt }: { localSrc: string, externalSrc: string, alt: string }) => {
+  const [imgSrc, setImgSrc] = useState(localSrc);
 
   useEffect(() => {
-    setImgSrc(primarySrc);
-  }, [primarySrc]);
+    setImgSrc(localSrc);
+  }, [localSrc]);
 
   return (
     <img
       src={imgSrc}
       alt={alt}
       onError={() => {
-        setImgSrc(fallbackSrc);
+        if (imgSrc !== externalSrc) {
+          setImgSrc(externalSrc);
+        }
       }}
       className="absolute inset-0 w-full h-full object-contain p-2"
-      loading="lazy"
+      loading="eager"
     />
   );
 };
@@ -48,11 +50,11 @@ export default function BettingSiteSelector() {
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-2 gap-6">
           {bettingSites.map((site) => (
-            <Link href={`/hack?platform=${encodeURIComponent(site.name)}&logoUrl=${encodeURIComponent(site.logoUrl)}&logoPath=${encodeURIComponent(site.logoPath)}`} key={site.name}>
+            <Link href={`/hack?platform=${encodeURIComponent(site.name)}&logoPath=${encodeURIComponent(site.logoPath)}&logoUrl=${encodeURIComponent(site.logoUrl)}`} key={site.name}>
               <div className="bg-blue-900 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-shadow flex items-center justify-center relative h-28">
                 <ImageWithFallback
-                  primarySrc={site.logoUrl}
-                  fallbackSrc={site.logoPath}
+                  localSrc={site.logoPath}
+                  externalSrc={site.logoUrl}
                   alt={`${site.name} logo`}
                 />
               </div>
