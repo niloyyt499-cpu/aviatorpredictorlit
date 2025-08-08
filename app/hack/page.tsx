@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 import { sendTelegramMessage } from "./actions"
 
-const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }) => {
+const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }: { primarySrc: string, fallbackSrc: string, alt: string }) => {
   const [imgSrc, setImgSrc] = useState(primarySrc);
 
   useEffect(() => {
