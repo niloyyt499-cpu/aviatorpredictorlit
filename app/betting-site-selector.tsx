@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }) => {
+const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }: { primarySrc: string, fallbackSrc: string, alt: string }) => {
   const [imgSrc, setImgSrc] = useState(primarySrc);
 
   useEffect(() => {
