@@ -1,19 +1,41 @@
-import Image from 'next/image'
-import Link from 'next/link'
+"use client";
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+const ImageWithFallback = ({ primarySrc, fallbackSrc, alt }) => {
+  const [imgSrc, setImgSrc] = useState(primarySrc);
+
+  useEffect(() => {
+    setImgSrc(primarySrc);
+  }, [primarySrc]);
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      onError={() => {
+        setImgSrc(fallbackSrc);
+      }}
+      className="absolute inset-0 w-full h-full object-contain p-2"
+      loading="lazy"
+    />
+  );
+};
 
 export default function BettingSiteSelector() {
   const bettingSites = [
-    { name: "Betwinner", logoSrc: "/logos/betwinner-logo.png" },
-    { name: "Jeetwin", logoSrc: "/logos/jeetwinbd-logo.png" },
-    { name: "1xbet", logoSrc: "/logos/1xbet-logo.png" },
-    { name: "Allbet", logoSrc: "/logos/allbet-logo.png" },
-    { name: "Linebet", logoSrc: "/logos/linebet-logo.png" },
-    { name: "Betfair", logoSrc: "/logos/betfair-logo.png" },
-    { name: "Mostbet", logoSrc: "/logos/mostbet-logo.png" },
-    { name: "Melbet", logoSrc: "/logos/melbet-logo.png" },
-    { name: "Jaya9", logoSrc: "/logos/jaya9-logo.png" },
-    { name: "Kreekya", logoSrc: "/logos/krikya-logo.png" },
-  ]
+    { name: "Betwinner", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/betwinner-logo.png", logoPath: "/logos/betwinner-logo.png" },
+    { name: "Jeetwin", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/jeetwinbd-logo.png", logoPath: "/logos/jeetwinbd-logo.png" },
+    { name: "1xbet", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/1xbet-logo.png", logoPath: "/logos/1xbet-logo.png" },
+    { name: "Allbet", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/allbet-logo.png", logoPath: "/logos/allbet-logo.png" },
+    { name: "Linebet", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/linebet-logo.png", logoPath: "/logos/linebet-logo.png" },
+    { name: "Betfair", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/betfair-logo.png", logoPath: "/logos/betfair-logo.png" },
+    { name: "Mostbet", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/mostbet-logo.png", logoPath: "/logos/mostbet-logo.png" },
+    { name: "Melbet", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/melbet-logo.png", logoPath: "/logos/melbet-logo.png" },
+    { name: "Jaya9", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/jaya9-logo.png", logoPath: "/logos/jaya9-logo.png" },
+    { name: "Kreekya", logoUrl: "https://raw.githubusercontent.com/niloyyt499-cpu/aviatorlite-logo/main/krikya-logo.png", logoPath: "/logos/krikya-logo.png" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 pb-20">
@@ -26,16 +48,12 @@ export default function BettingSiteSelector() {
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-2 gap-6">
           {bettingSites.map((site) => (
-            <Link href={`/hack?platform=${encodeURIComponent(site.name)}&logo=${encodeURIComponent(site.logoSrc)}`} key={site.name}>
-              <div
-                className="bg-blue-900 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-shadow flex items-center justify-center relative h-28"
-              >
-                <Image
-                  src={site.logoSrc || "/placeholder.svg"}
+            <Link href={`/hack?platform=${encodeURIComponent(site.name)}&logoUrl=${encodeURIComponent(site.logoUrl)}&logoPath=${encodeURIComponent(site.logoPath)}`} key={site.name}>
+              <div className="bg-blue-900 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-shadow flex items-center justify-center relative h-28">
+                <ImageWithFallback
+                  primarySrc={site.logoUrl}
+                  fallbackSrc={site.logoPath}
                   alt={`${site.name} logo`}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  className="p-2"
                 />
               </div>
             </Link>
@@ -43,5 +61,5 @@ export default function BettingSiteSelector() {
         </div>
       </div>
     </div>
-  )
+  );
 }
